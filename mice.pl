@@ -403,8 +403,12 @@ sub putToken($token) {
 
 sub parse($program) {
     my @tokens = lexer($program);
-    makeTokens(@tokens);
+    use Data::Printer;
+    p @tokens;
 
+    makeTokens(@tokens);
+    
+    exit;
     my %hash = ();
     my $ast = lang();
     if($ast) {
@@ -584,8 +588,6 @@ sub codeBlock() {
     if(! $lBrace) {return 0};
     $codeBlock->{"lBrace"} = $lBrace;
 
-
-    
     my $block = blocks();
     if(! $block) { return 0; }
     $codeBlock->{"blocks"} = $block;
@@ -602,13 +604,108 @@ sub codeBlock() {
 }
 
 sub blocks() {
-    # implement
-    return 1;
+    my @blocks = ();
+
+    while(1) {
+        my $block = block();
+        if($block) {
+            push @blocks, $block;
+        } 
+
+        if($block == 0 && scalar(@blocks) == 0) {
+            return 0;
+        }
+
+        return \@blocks;
+    }
+}
+
+sub block() {
+    my $ifElse = ifElse();
+    if($ifElse) {
+        return { "ifElse" => $ifElse };
+    }
+
+    my $while1 = while1();
+    if($while1) {
+        return { "defineEmbed" => $while1 };
+    }
+
+    my $forEach = forEach();
+    if($forEach) {
+        return { "forEach" => $forEach };
+    }
+
+    my $arrayEach = arrayEach();
+    if($arrayEach) {
+        return { "arrayEach" => $arrayEach };
+    }
+
+    my $hashEach = hashEach();
+    if($hashEach) {
+        return { "hashEach" => $hashEach };
+    }
+
+    my $embBlock = embBlock();
+    if($embBlock) {
+        return { "embBlock" => $embBlock };
+    }
+
+    my $statement = statement();
+    if($statement) {
+        return { "statement" => $statement };
+    }
+
+    my $nonSyntax = nonSyntax();
+    if($nonSyntax) {
+        return { "nonSyntax" => $nonSyntax };
+    }
+
+    return 0;
+}
+
+sub nonSyntax() {
+    my $token = getToken();
+    print("Error at: ", $token->{"value"}, "\n");
+    exit;
 }
 
 sub defineEmbed() {
-    # implement
-    return 0;
+    my $embed = {};
+
+    my $tokenEmbed = tokenEmbed();
+    if(! $tokenEmbed) {return 0}
+    $embed->{"tokenEmbed"} = $tokenEmbed;
+
+    my $tokenEmbedCode = embedCodeBlock();
+    if(! $tokenEmbedCode) {return 0};
+    $embed->{"tokenEmbedCode"} = $tokenEmbedCode;
+
+    return $embed;
+}
+
+sub tokenEmbed() {
+    my $token = getToken();
+    if($token->{"value"} eq "emb") {
+        return "emb";
+    } else {
+        putToken($token);
+        return 0;
+    }
+}
+
+sub embedCodeBlock() {
+    my $token = getToken();
+    if($token) {
+        return $token->{"value"};
+    } else {
+        putToken($token);
+        return 0;
+    }
+}
+
+sub while1() {
+    
 }
 
 sub lBrace() {
@@ -638,6 +735,8 @@ sub rBrace() {
 
 my $program = '
     sub printTest() {
+
+        emb(? print("from perl"); ?)
         print("test program", "\n");
     }
 
@@ -646,7 +745,11 @@ my $program = '
     }
 ';
 
+
+
 my %ast = parse($program);
 use Data::Printer;
-p %ast;
+p $pp{"tokens"};
+#use Data::Printer;
+#p %ast;
 exit;

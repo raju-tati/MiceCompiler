@@ -705,7 +705,310 @@ sub embedCodeBlock() {
 }
 
 sub while1() {
+    my $while = {};
+
+    my $tokenWhile = tokenWhile();
+    if(! $tokenWhile) {return 0}
+    $while->{"tokenWhile"} = $tokenWhile;
+
+    my $lParen = lParen();
+    if(! $lParen) {return 0};
+    $while->{"lParen"} = $lParen;
+
+    my $booleanExpression = booleanExpression();
+    if(! $booleanExpression) { return 0; }
+    $while->{"booleanExpression"} = $booleanExpression;
+
+    my $rParen = rParen();
+    if(! $rParen) {return 0};
+    $while->{"rParen"} = $rParen;
+
+    my $codeBlock = codeBlock();
+    if(! $codeBlock) {return 0};
+    $while->{"codeBlock"} = $codeBlock;
+
+    return $while;
+}
+
+sub forEach() {
+    my $forEach = {};
+
+    my $tokenForEach = tokenForEach();
+    if(! $tokenForEach) {return 0}
+    $forEach->{"tokenForEach"} = $tokenForEach;
+
+    my $lParen = lParen();
+    if(! $lParen) {return 0}
+    $forEach->{"lParen"} = $lParen;
+
+    my $forRange = forRange();
+    if(! $forRange) {return 0}
+    $forEach->{"forRange"} = $forRange;
+
+    my $rParen = rParen();
+    if(! $rParen) {return 0}
+    $forEach->{"rParen"} = $rParen;
+
+    my $eachSymbol = eachSymbol();
+    if(! $eachSymbol) {return 0}
+    $forEach->{"eachSymbol"} = $eachSymbol;
+
+    my $lParen = lParen();
+    if(! $lParen) {return 0}
+    $forEach->{"lParen"} = $lParen;
+
+    my $variableName = variableName();
+    if(! $variableName) {return 0}
+    $forEach->{"variableName"} = $variableName;
+
+    my $rParen = rParen();
+    if(! $rParen) {return 0}
+    $forEach->{"rParen"} = $rParen;
+
+    my $codeBlock = codeBlock();
+    if(! $codeBlock) {return 0}
+    $forEach->{"codeBlock"} = $codeBlock;
     
+    return $forEach;
+}
+
+sub arrayEach() {
+    my $arrayEach = {};
+
+    my $tokenArrayEach = tokenArrayEach();
+    if(! $tokenArrayEach) {return 0}
+    $arrayEach->{"tokenArrayEach"} = $tokenArrayEach;
+
+    my $lParen = lParen();
+    if(! $lParen) {return 0}
+    $arrayEach->{"lParen"} = $lParen;
+
+    my $variableName = variableName();
+    if(! $variableName) {return 0}
+    $arrayEach->{"variableName"} = $variableName;
+
+    my $rParen = rParen();
+    if(! $rParen) {return 0}
+    $arrayEach->{"rParen"} = $rParen;
+
+    my $eachSymbol = eachSymbol();
+    if(! $eachSymbol) {return 0}
+    $arrayEach->{"eachSymbol"} = $eachSymbol;
+
+    my $lParen = lParen();
+    if(! $lParen) {return 0}
+    $arrayEach->{"lParen"} = $lParen;
+
+    my $arrayEachVariableName = arrayEachVariableName();
+    if(! $arrayEachVariableName) {return 0};
+    $arrayEach->{"arrayEachVariableName"} = $arrayEachVariableName;
+
+    my $comma = comma();
+    if(! $comma) {return 0}
+    $arrayEach->{"comma"} = $comma;
+
+    my $arrayEachNumber = arrayEachNumber();
+    if(! $arrayEachNumber) {return 0};
+    $arrayEach->{"arrayEachNumber"} = $arrayEachNumber;
+
+    my $rParen = rParen();
+    if(! $rParen) {return 0}
+    $arrayEach->{"rParen"} = $rParen;
+
+    my $codeBlock = codeBlock();
+    if(! $codeBlock) {return 0}
+    $arrayEach->{"codeBlock"} = $codeBlock;
+
+    return $arrayEach;
+}
+
+sub arrayEachVariableName() {
+    my $variableName = variableName();
+    if($variableName) {
+        return {"variableName" => $variableName};
+    }
+
+    return 0;
+}
+
+sub arrayEachNumber() {
+    my $variableName = variableName();
+    if($variableName) {
+        return {"variableName" => $variableName};
+    }
+
+    return 0;
+}
+
+sub hashEach() {
+    my $hashEach = {};
+
+    my $tokenHashEach = tokenHashEach();
+    if(! $tokenHashEach) {return 0}
+    $hashEach->{"tokenHashEach"} = $tokenHashEach;
+
+    my $lParen = lParen();
+    if(! $lParen) {return 0}
+    $hashEach->{"lParen"} = $lParen;
+
+    my $variableName = variableName();
+    if(! $variableName) {return 0}
+    $hashEach->{"variableName"} = $variableName;
+
+    my $rParen = rParen();
+    if(! $rParen) {return 0}
+    $hashEach->{"rParen"} = $rParen;
+
+    my $eachSymbol = eachSymbol();
+    if(! $eachSymbol) {return 0}
+    $hashEach->{"eachSymbol"} = $eachSymbol;
+
+    my $lParen = lParen();
+    if(! $lParen) {return 0}
+    $hashEach->{"lParen"} = $lParen;
+
+    my $HashEachKey = HashEachKey();
+    if(! $HashEachKey) {return 0};
+    $hashEach->{"HashEachKey"} = $HashEachKey;
+
+    my $comma = comma();
+    if(! $comma) {return 0}
+    $hashEach->{"comma"} = $comma;
+
+    my $HashEachValue = HashEachValue();
+    if(! $HashEachValue) {return 0};
+    $hashEach->{"HashEachValue"} = $HashEachValue;
+
+    my $rParen = rParen();
+    if(! $rParen) {return 0}
+    $hashEach->{"rParen"} = $rParen;
+
+    my $codeBlock = codeBlock();
+    if(! $codeBlock) {return 0}
+    $hashEach->{"codeBlock"} = $codeBlock;
+
+    return $hashEach;
+}
+
+sub hashEachKey() {
+    my $variableName = variableName();
+    if($variableName) {
+        return {"variableName" => $variableName};
+    }
+
+    return 0;
+}
+
+sub hashEachValue() {
+    my $variableName = variableName();
+    if($variableName) {
+        return {"variableName" => $variableName};
+    }
+
+    return 0;
+}
+
+sub forRange() {
+    my $forRange = {};
+
+    my $lowerRange = lowerRange();
+    if(! $lowerRange) {return 0}
+    $forRange->{"lowerRange"} = $lowerRange;
+
+    my $rangeOperator = rangeOperator();
+    if(! $rangeOperator) {return 0}
+    $forRange->{"rangeOperator"} = $rangeOperator;
+
+    my $upperRange = upperRange();
+    if(! $upperRange) {return 0}
+    $forRange->{"upperRange"} = $upperRange;
+
+    return $forRange;
+}
+
+sub lowerRange() {
+    my $string = string();
+    if($string) {
+        return { "string" => $string };
+    }
+
+    my $number = number();
+    if($number) {
+        return { "number" => $number };
+    }
+
+    my $variableName = variableName();
+    if($variableName) {
+        return { "variableName" => $variableName };
+    }
+
+    my $arrayElement = arrayElement();
+    if($arrayElement) {
+        return { "arrayElement" => $arrayElement };
+    }
+
+    my $hashElement = hashElement();
+    if($hashElement) {
+        return { "hashElement" => $hashElement };
+    }
+
+    my $functionReturn = functionReturn();
+    if($functionReturn) {
+        return { "functionReturn" => $functionReturn };
+    }
+
+    return 0;
+}
+
+
+sub upperRange() {
+    my $string = string();
+    if($string) {
+        return { "string" => $string };
+    }
+
+    my $number = number();
+    if($number) {
+        return { "number" => $number };
+    }
+
+    my $variableName = variableName();
+    if($variableName) {
+        return { "variableName" => $variableName };
+    }
+
+    my $arrayElement = arrayElement();
+    if($arrayElement) {
+        return { "arrayElement" => $arrayElement };
+    }
+
+    my $hashElement = hashElement();
+    if($hashElement) {
+        return { "hashElement" => $hashElement };
+    }
+
+    my $functionReturn = functionReturn();
+    if($functionReturn) {
+        return { "functionReturn" => $functionReturn };
+    }
+    
+    return 0;
+}
+
+sub ifElse() {
+    my $ifElse = {};
+
+    my $if = If();
+    if(! $if) {return 0}
+    $ifElse->{"if"} = $if;
+
+    my $elseIf = elseIf();
+    $ifElse->{"elseIf"} = $elseIf;
+
+    my $else = Else();
+    $ifElse->{"else"} = $else;
+
+    return $ifElse;
 }
 
 sub lBrace() {
@@ -716,7 +1019,6 @@ sub lBrace() {
         putToken($token);
         return 0;
     }
-    
 }
 
 sub rBrace() {
@@ -735,9 +1037,10 @@ sub rBrace() {
 
 my $program = '
     sub printTest() {
-
-        emb(? print("from perl"); ?)
-        print("test program", "\n");
+        forEach (num .. numTwo) => (element) {
+            print("test program", "\n");
+        }
+        emb(? print("from perl"); ?)   
     }
 
     sub anotherFunction(arg) {

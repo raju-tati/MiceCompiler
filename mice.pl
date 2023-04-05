@@ -753,7 +753,7 @@ sub forEach() {
     if(! $eachSymbol) {return 0}
     $forEach->{"eachSymbol"} = $eachSymbol;
 
-    my $lParen = lParen();
+    $lParen = lParen();
     if(! $lParen) {return 0}
     $forEach->{"lParen"} = $lParen;
 
@@ -761,7 +761,7 @@ sub forEach() {
     if(! $variableName) {return 0}
     $forEach->{"variableName"} = $variableName;
 
-    my $rParen = rParen();
+    $rParen = rParen();
     if(! $rParen) {return 0}
     $forEach->{"rParen"} = $rParen;
 
@@ -795,7 +795,7 @@ sub arrayEach() {
     if(! $eachSymbol) {return 0}
     $arrayEach->{"eachSymbol"} = $eachSymbol;
 
-    my $lParen = lParen();
+    $lParen = lParen();
     if(! $lParen) {return 0}
     $arrayEach->{"lParen"} = $lParen;
 
@@ -811,7 +811,7 @@ sub arrayEach() {
     if(! $arrayEachNumber) {return 0};
     $arrayEach->{"arrayEachNumber"} = $arrayEachNumber;
 
-    my $rParen = rParen();
+    $rParen = rParen();
     if(! $rParen) {return 0}
     $arrayEach->{"rParen"} = $rParen;
 
@@ -863,7 +863,7 @@ sub hashEach() {
     if(! $eachSymbol) {return 0}
     $hashEach->{"eachSymbol"} = $eachSymbol;
 
-    my $lParen = lParen();
+    $lParen = lParen();
     if(! $lParen) {return 0}
     $hashEach->{"lParen"} = $lParen;
 
@@ -879,7 +879,7 @@ sub hashEach() {
     if(! $HashEachValue) {return 0};
     $hashEach->{"HashEachValue"} = $HashEachValue;
 
-    my $rParen = rParen();
+    $rParen = rParen();
     if(! $rParen) {return 0}
     $hashEach->{"rParen"} = $rParen;
 
@@ -1011,6 +1011,60 @@ sub ifElse() {
     return $ifElse;
 }
 
+sub If() {
+    my $if = {};
+
+    my $tokenIf = tokenIf();
+    if(! $tokenIf) {return 0}
+    $if->{"tokenIf"} = $tokenIf;
+
+    my $lParen = lParen();
+    if(! $lParen) {return 0}
+    $if->{"lParen"} = $lParen;
+
+    my $boolExpression = boolExpression();
+    if(! $boolExpression) {return 0}
+    $if->{"boolExpression"} = $boolExpression;
+
+    my $rParen = rParen();
+    if(! $rParen) {return 0}
+    $if->{"rParen"} = $rParen;    
+
+    my $codeBlock = codeBlock();
+    if(! $codeBlock) {return 0}
+    $if->{"codeBlock"} = $codeBlock;
+
+    return $if;
+}
+
+sub boolExpression() {
+    my @boolExpression = ();
+    while(1) {
+        my $booleanExpression = booleanExpression();
+        if($booleanExpression) {
+            push @boolExpression, $booleanExpression;
+        }
+
+        my $token = getToken();
+        if($token->{"type"} ne "Operator") {
+            putToken($token);
+            return \@boolExpression;
+        } else {
+            push @boolExpression, $token->{"value"};
+        }
+
+        $booleanExpression = booleanExpression();
+        if($booleanExpression) {
+            push @boolExpression, $booleanExpression;
+        }
+    }
+}
+
+sub booleanExpression() {
+
+    return 1;
+}
+
 sub lBrace() {
     my $token = getToken();
     if($token->{"value"} eq "{") {
@@ -1037,10 +1091,9 @@ sub rBrace() {
 
 my $program = '
     sub printTest() {
-        forEach (num .. numTwo) => (element) {
-            print("test program", "\n");
+        if( 2 > 1 && 3 > 2 ) {
+            emb(? print("from perl"); ?)   
         }
-        emb(? print("from perl"); ?)   
     }
 
     sub anotherFunction(arg) {
